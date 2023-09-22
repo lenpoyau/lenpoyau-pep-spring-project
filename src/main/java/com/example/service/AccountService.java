@@ -32,7 +32,7 @@ public class AccountService {
      /*
      * retrieve and return all accounts found in the db
      */
-    public List<Account> getAllAccount() {
+    public List<Account> getAllAccounts() {
         return accountRepository.findAll();
     }
 }

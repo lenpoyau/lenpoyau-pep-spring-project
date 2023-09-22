@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.entity.Account;
 import com.example.entity.Message;
 import com.example.service.AccountService;
 import com.example.service.MessageService;
@@ -27,9 +28,19 @@ public class SocialMediaController {
         this.accountService = accountService;
     }
 
-
+    /*
+     * Retrieve all messages that are currently saved/persisted in the db
+     */
     @GetMapping("/messages")
     public List<Message> getAllMessages() {
         return messageService.getAllMessages(); 
+    }
+
+    /*
+     * Retrieve all user accounts that are currently saved/
+     */
+    @GetMapping("/accounts")
+    public List<Account> getAllAccounts() {
+        return accountService.getAllAccounts(); 
     }
 }
