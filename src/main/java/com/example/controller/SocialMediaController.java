@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Account;
@@ -28,6 +30,12 @@ public class SocialMediaController {
         this.accountService = accountService;
     }
 
+    @PostMapping("/register")
+    public Account addAccount(@RequestBody Account reqBody) {
+        // return accountService.addAccount(reqBody);
+        return reqBody;
+    }
+    
     /*
      * Retrieve all messages that are currently saved/persisted in the db
      */
