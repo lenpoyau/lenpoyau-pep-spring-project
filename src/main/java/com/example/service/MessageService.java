@@ -34,7 +34,7 @@ public class MessageService {
     /*
      * return all message entities found in the db method
      */
-    public List<Message> getAllMessage() {
+    public List<Message> getAllMessages() {
         return messageRepository.findAll();
     }
 }
