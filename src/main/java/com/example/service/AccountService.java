@@ -1,6 +1,7 @@
 package com.example.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,8 +26,14 @@ public class AccountService {
     /*
      * Add a new user account in the database and return it
      */
-    public Account addAccount(Account account) {
-        return accountRepository.save(account);
+    public void addAccount(Account newAccount) {
+        // Optional<Account> accountOptional = accountRepository.findAccountByUsername(newAccount.getUsername());
+        // if( accountOptional.isEmpty() && newAccount.getPassword().length() >= 4 && !newAccount.getUsername().isEmpty()  ) {
+        //     accountRepository.save(newAccount);
+        // } else {
+        //     if(!accountOptional.isEmpty())
+        // }
+         accountRepository.save(newAccount);
     }
 
      /*
@@ -35,4 +42,14 @@ public class AccountService {
     public List<Account> getAllAccounts() {
         return accountRepository.findAll();
     }
+
+    // public Account retrieveAccountByUsername(Account checkAcctByName) {
+    //     Optional<Account> checkAcctByNameOptional = accountRepository.findAccountByUsername(checkAcctByName.getUsername());
+    //     return checkAcctByNameOptional.get();
+    // }
+    public Optional<Account> retrieveAccountByUsername(String checkAcctByName) {
+        Optional<Account> checkAcctByNameOptional = accountRepository.findAccountByUsername(checkAcctByName);
+        return checkAcctByNameOptional;
+    }
+    
 }

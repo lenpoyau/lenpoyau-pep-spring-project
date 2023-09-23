@@ -1,8 +1,11 @@
 package com.example.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,9 +34,23 @@ public class SocialMediaController {
     }
 
     @PostMapping("/register")
-    public Account addAccount(@RequestBody Account reqBody) {
-        // return accountService.addAccount(reqBody);
-        return reqBody;
+    public ResponseEntity<Account> createAccount(@RequestBody Account newAccount) {
+        
+        Optional<Account> accountOptional = accountService.retrieveAccountByUsername(newAccount.getUsername());
+        if(!accountOptional.isEmpty() ) {
+            System.out.println("User account already exists. Conflict error 409.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
+
+        if( accountOptional.isEmpty() && newAccount.getPassword().length() >= 4 && !newAccount.getUsername().isEmpty()  ) {
+            accountService.addAccount(newAccount);
+            System.out.println("New login account successfully created");
+            return ResponseEntity.status(HttpStatus.OK).body(newAccount);
+        } 
+        /* if we get to this line then user account creation failed for some other reasons */
+        System.out.println("Your username or password is invalid");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
     }
     
     /*
