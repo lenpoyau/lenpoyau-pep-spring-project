@@ -52,6 +52,34 @@ public class SocialMediaController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<Account> userLogin(@RequestBody Account loginAccount) {
+        
+        Optional<Account> accountOptional = accountService.retrieveAccountByUsername(loginAccount.getUsername());
+        /**
+             * Checks to ensure that username being passed isn't blank.
+             * Checks to ensure that password is at least 4 characters long
+             * Checks to ensure that an account with that username does already exist
+             */
+
+        if(!accountOptional.isEmpty() ) {
+                String expectedUname = accountOptional.get().getUsername();
+                String expectedPass = accountOptional.get().getPassword();
+                String actualUserName = loginAccount.getUsername();
+                String actualPassword = loginAccount.getPassword();
+
+                if(expectedUname.equals(actualUserName) && expectedPass.equals(actualPassword)) {
+                    System.out.println("User login successful.");
+                    return ResponseEntity.status(HttpStatus.OK).body(accountOptional.get());
+                    
+                }
+        }
+
+        /* if we've reach the lines below then user login has failed */ 
+        System.out.println("user login has failed. Please check username & password are valid");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
     
     /*
      * Retrieve all messages that are currently saved/persisted in the db
