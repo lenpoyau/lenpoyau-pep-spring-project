@@ -148,7 +148,7 @@ public class SocialMediaController {
      * Retrieve message by its ID
      */
      @GetMapping("/messages/{message_id}")
-     public ResponseEntity<Message> findCakesByCalories(@PathVariable int message_id){
+     public ResponseEntity<Message> findMessageByItsID(@PathVariable int message_id){
          
          Optional<Message> messageOptional = messageService.retrieveMessageById(message_id);
          if(!messageOptional.isEmpty()) {
