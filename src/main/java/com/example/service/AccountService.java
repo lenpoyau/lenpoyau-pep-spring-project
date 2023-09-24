@@ -51,5 +51,10 @@ public class AccountService {
         Optional<Account> checkAcctByNameOptional = accountRepository.findAccountByUsername(checkAcctByName);
         return checkAcctByNameOptional;
     }
+
+    public Optional<Account> retrieveAccountById(int checkAcctById) {
+        Optional<Account> checkAcctByIdOptional = accountRepository.findAccountByID(checkAcctById);
+        return checkAcctByIdOptional;
+    }
     
 }

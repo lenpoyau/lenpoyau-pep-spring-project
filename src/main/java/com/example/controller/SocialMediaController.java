@@ -96,4 +96,50 @@ public class SocialMediaController {
     public List<Account> getAllAccounts() {
         return accountService.getAllAccounts(); 
     }
+
+    @PostMapping("/messages")
+    public ResponseEntity<Message> createMessage(@RequestBody Message newMessage) {
+                
+            /**
+             * Check#1 if message_text is empty. If it is then return ctx.status(400) and empty 
+             * json body
+             * 
+             * Check#2 if message_text length is longer than 244 characters then return ctx.json(400) status
+             * 
+             * Check#3 if account_id (DB user) being passed from Json request exist in the DB
+             */
+            
+            Integer posted_by_id_sent = newMessage.getPosted_by();
+            // System.out.println("1st Check. Printing value of Integer posted_by_id_sent var: " + posted_by_id_sent);
+            if(posted_by_id_sent == null) {
+                System.out.println("posted_by value null. enter a posted_by value: " + posted_by_id_sent);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+            
+            Optional<Account> accountOptional = accountService.retrieveAccountById(posted_by_id_sent);
+            if(accountOptional.isEmpty()) {
+                System.out.println("Account ID for posting user doesn't exist");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+            
+            boolean isMessage_text_empty = newMessage.getMessage_text().isEmpty();
+            boolean isMessage_text_greater_than_254_chars = newMessage.getMessage_text().length() > 254;
+            
+             
+            if(isMessage_text_empty) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+                
+            } else if(isMessage_text_greater_than_254_chars) {
+                System.out.println("Message length greater than 254 chars");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            } else if(accountOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            
+            }    else { // else block added
+                    messageService.addMessage(newMessage);
+                    System.out.println("New message successfully created");
+                    return ResponseEntity.status(HttpStatus.OK).body(newMessage);
+                    
+           } // ends else
+        }
 }
