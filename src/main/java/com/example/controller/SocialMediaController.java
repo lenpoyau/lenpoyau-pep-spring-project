@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -174,5 +175,40 @@ public class SocialMediaController {
         Integer rowsnotdeleted = 0;  // added so it can pass the Junit test. Supposed be NULL
         System.out.println("Row(s) deleted: " + rowsnotdeleted);
         return ResponseEntity.status(HttpStatus.OK).body(rowsnotdeleted);
+	}
+
+    @PatchMapping("/messages/{message_id}")
+	public ResponseEntity<Integer> updateMessageByItsID(@RequestBody Message newMessage, @PathVariable int message_id){
+		
+            boolean isMessage_text_empty = newMessage.getMessage_text().isEmpty();
+            boolean isMessage_text_greater_than_254_chars = newMessage.getMessage_text().length() > 254;
+            
+             
+            if(isMessage_text_empty) {
+                System.out.println("Text message being sent is empty");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+                
+            } else if(isMessage_text_greater_than_254_chars) {
+                System.out.println("Message length greater than 254 chars");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            } 
+            
+        Optional<Message> messageOptional = messageService.retrieveMessageById(message_id);
+        if(!messageOptional.isEmpty()) {
+            
+            Message messagetoUpdate = messageOptional.get();
+            messagetoUpdate.setMessage_text(newMessage.getMessage_text());
+            
+            Integer rowsupdated = messageService.updateMessageByPerID(messagetoUpdate.getMessage_text(),message_id);
+            
+            System.out.println("Row(s) updated: " + rowsupdated);
+            return ResponseEntity.status(HttpStatus.OK).body(rowsupdated); 
+        }
+        /** at this point, the update operation has failed for some reason. 
+         * Return Status 400 and 0 rows updated returned in the JSON response body
+         * */
+        Integer rowsnotupdated = 0;
+        System.out.println("Row(s) updated: " + rowsnotupdated);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(rowsnotupdated);
 	}
 }

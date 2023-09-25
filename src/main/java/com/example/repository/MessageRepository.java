@@ -19,4 +19,8 @@ public interface MessageRepository extends JpaRepository<Message, Integer>{
     @Modifying
     @Query(value="delete from message m WHERE m.message_id = ?1", nativeQuery=true)
     int deleteMessagePerID(int id);
+
+    @Modifying
+    @Query(value="update message m set m.message_text = ?1 where message_id = ?2", nativeQuery=true)
+    int updateMessagePerItsID(String message_text, int id);
 }

@@ -52,4 +52,11 @@ public class MessageService {
         
         return rowsdeleted;
     }
+
+    @Transactional
+    public int updateMessageByPerID(String message_text, int message_id) {
+        int rowsupdated = messageRepository.updateMessagePerItsID(message_text,message_id);
+        
+        return rowsupdated;
+    }
 }
