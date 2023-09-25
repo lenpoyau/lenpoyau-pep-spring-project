@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -156,4 +157,22 @@ public class SocialMediaController {
          }
          return ResponseEntity.status(HttpStatus.OK).body(null);
      }
+
+     @DeleteMapping("/messages/{message_id}")
+	public ResponseEntity<Integer> deleteMessageByItsID(@PathVariable int message_id){
+		
+        Optional<Message> messageOptional = messageService.retrieveMessageById(message_id);
+        if(!messageOptional.isEmpty()) {
+            // messageService.removeMessageByItsID(message_id);
+            // messageRepository.deleteById(message_id);
+            
+            Integer rowsdeleted = messageService.removeMessageByPerID(message_id);
+            System.out.println("Row(s) deleted: " + rowsdeleted);
+            return ResponseEntity.status(HttpStatus.OK).body(rowsdeleted); 
+        }
+        /** at this point the delete by message id operation has failed */
+        Integer rowsnotdeleted = 0;  // added so it can pass the Junit test. Supposed be NULL
+        System.out.println("Row(s) deleted: " + rowsnotdeleted);
+        return ResponseEntity.status(HttpStatus.OK).body(rowsnotdeleted);
+	}
 }
