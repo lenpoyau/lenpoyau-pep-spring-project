@@ -177,6 +177,9 @@ public class SocialMediaController {
         return ResponseEntity.status(HttpStatus.OK).body(rowsnotdeleted);
 	}
 
+    /**
+     * Retrieve message by its message id
+     */
     @PatchMapping("/messages/{message_id}")
 	public ResponseEntity<Integer> updateMessageByItsID(@RequestBody Message newMessage, @PathVariable int message_id){
 		
@@ -211,4 +214,13 @@ public class SocialMediaController {
         System.out.println("Row(s) updated: " + rowsnotupdated);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(rowsnotupdated);
 	}
+
+    /*
+     * Retrieve a list of messages by User account
+     */
+    @GetMapping("/accounts/{account_id}/messages")
+    public ResponseEntity<List<Message>> getMessagesByAccount(@PathVariable int account_id) {
+        List<Message> messageByAccountList = messageService.findMessagesPerAccountID(account_id);
+        return ResponseEntity.status(HttpStatus.OK).body(messageByAccountList);
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,4 +24,7 @@ public interface MessageRepository extends JpaRepository<Message, Integer>{
     @Modifying
     @Query(value="update message m set m.message_text = ?1 where message_id = ?2", nativeQuery=true)
     int updateMessagePerItsID(String message_text, int id);
+
+    @Query(value="select * from message where posted_by = ?1", nativeQuery = true)
+    List<Message> retrieveMessagesByAccount(int account_id);
 }

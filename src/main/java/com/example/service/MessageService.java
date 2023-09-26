@@ -59,4 +59,9 @@ public class MessageService {
         
         return rowsupdated;
     }
+
+    public List<Message> findMessagesPerAccountID(int account_id) {
+        List<Message> messageListByAcctId = messageRepository.retrieveMessagesByAccount(account_id);
+        return messageListByAcctId;
+    }
 }
